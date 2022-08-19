@@ -15,7 +15,13 @@ const MainTabNavigator = () => {
           if (route.name === "Pokemons") {
             return <Ionicons name="list" size={size} color={color} />;
           } else {
-            return <Ionicons name="heart" size={size} color={color} />;
+            if (focused) {
+              return <Ionicons name="heart" size={size} color={color} />;
+            } else {
+              return (
+                <Ionicons name="heart-outline" size={size} color={color} />
+              );
+            }
           }
         },
       })}

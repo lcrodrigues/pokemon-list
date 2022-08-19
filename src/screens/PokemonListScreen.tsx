@@ -7,13 +7,16 @@ import { isEqual } from "../utils/functions/arrayFunctions";
 import Cell from "../components/Cell";
 
 const limit = 20;
+let count = 0;
 
 const PokemonListScreen = () => {
   const [pokemons, setPokemons] = useState<PokemonResult[]>([]);
   const [offset, setOffset] = useState<number>(0);
 
   const updateOffset = () => {
-    setOffset((oldValue) => limit + oldValue);
+    if (offset < count) {
+      setOffset((oldValue) => limit + oldValue);
+    }
   };
 
   const getPokemon = () => {
@@ -21,6 +24,10 @@ const PokemonListScreen = () => {
       .get<Pokemon>(`pokemon?limit=${limit}&offset=${offset}`)
       .then((response) => {
         const result = response.data.results;
+
+        if (count === 0) {
+          count = response.data.count;
+        }
 
         if (!isEqual(pokemons, result)) {
           setPokemons((oldValue: PokemonResult[]) => [...oldValue, ...result]);
@@ -42,7 +49,6 @@ const PokemonListScreen = () => {
         data={pokemons}
         renderItem={({ item }) => <Cell title={item.name} />}
         onEndReached={() => updateOffset()}
-        // onEndReachedThreshold={0.5}
       />
     </SafeAreaView>
   );
