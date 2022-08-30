@@ -1,56 +1,35 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { PokemonResult } from "../models/PokemonResult";
-import instance from "../../services/api";
-import { Pokemon } from "../models/Pokemon";
-import { isEqual } from "../utils/functions/arrayFunctions";
+import { FlatList, StyleSheet, Text } from "react-native";
+import React, { useEffect } from "react";
 import Cell from "../components/Cell";
-
-const limit = 20;
-let count = 0;
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPokemon } from "../store/pokemon/pokemonListSlice";
+import { AppDispatch, RootState } from "../store/store";
 
 const PokemonListScreen = () => {
-  const [pokemons, setPokemons] = useState<PokemonResult[]>([]);
-  const [offset, setOffset] = useState<number>(0);
+  const handleOnEndReached = () => {
+    const { loading, offset, pokemon } = screenState;
 
-  const updateOffset = () => {
-    if (offset < count) {
-      setOffset((oldValue) => limit + oldValue);
+    if (!loading) {
+      if (pokemon.count > 0 && offset < pokemon.count) {
+        dispatch(fetchPokemon({ offset: screenState.offset }));
+      }
     }
   };
 
-  const getPokemon = () => {
-    instance
-      .get<Pokemon>(`pokemon?limit=${limit}&offset=${offset}`)
-      .then((response) => {
-        const result = response.data.results;
-
-        if (count === 0) {
-          count = response.data.count;
-        }
-
-        if (!isEqual(pokemons, result)) {
-          setPokemons((oldValue: PokemonResult[]) => [...oldValue, ...result]);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    getPokemon();
-  }, [offset]);
+    dispatch(fetchPokemon({ offset: 0 }));
+  }, []);
 
+  const screenState = useSelector((state: RootState) => state.pokemonList);
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        style={styles.list}
-        data={pokemons}
-        renderItem={({ item }) => <Cell title={item.name} />}
-        onEndReached={() => updateOffset()}
-      />
-    </SafeAreaView>
+    <FlatList
+      style={styles.list}
+      data={screenState.pokemon.results}
+      renderItem={({ item }) => <Cell title={item.name} />}
+      onEndReached={() => handleOnEndReached()}
+    />
   );
 };
 
@@ -60,7 +39,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
   list: {
     margin: 16,
   },
