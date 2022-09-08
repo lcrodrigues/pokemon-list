@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FilledPokeball, Pokeball } from "../../assets/icons";
 
 interface FavoriteProps {
   isFavorite: boolean;
@@ -16,9 +16,9 @@ const Favorite = ({ isFavorite }: FavoriteProps) => {
   return (
     <TouchableOpacity onPress={handleSetFavorite}>
       {favorite ? (
-        <Ionicons name="heart" size={24} color="red" />
+        <FilledPokeball width={24} height={24} />
       ) : (
-        <Ionicons name="heart-outline" size={24} color="red" />
+        <Pokeball width={24} height={24} />
       )}
     </TouchableOpacity>
   );
