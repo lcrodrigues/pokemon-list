@@ -1,12 +1,18 @@
 import { Text } from "react-native";
-import React, { useEffect } from "react";
+import { StatsBar } from "../components/StatsBar";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { DetailsProps } from "../navigation/PokedexNavigator";
-import { getPokemonDetails } from "../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { fetchPokemonDetails } from "../store/pokemon/pokemonDetailSlice";
 
+type OrderedStats = {
+  baseStat: number;
+  name: string;
+};
 const Container = styled.View`
   flex: 1;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -30,6 +36,9 @@ const DetailsScreen = ({ route }: DetailsProps) => {
     dispatch(fetchPokemonDetails({ url }));
   }, []);
 
+  const screenState = useSelector((state: RootState) => state.pokemonDetail);
+  const { abilities, stats, types, weight, sprites } = screenState.detail;
+  const image = sprites.front_default;
   return (
     <Container>
       <ImageContainer>
@@ -39,6 +48,19 @@ const DetailsScreen = ({ route }: DetailsProps) => {
           }}
         />
       </ImageContainer>
+
+      {stats.map((stat, index) => {
+        return (
+          <>
+            <Text>{stat.base_stat}</Text>
+            <StatsBar
+              key={index}
+              setWidth={stat.base_stat}
+              statsName={stat.stat.name}
+            />
+          </>
+        );
+      })}
     </Container>
   );
 };
