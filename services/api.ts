@@ -40,10 +40,16 @@ export const getPokemonDetails = async (
 
   const results = await instance.get("");
 
-  console.log(results.data);
+  try {
+    return {
+      kind: "success",
+      body: results.data,
+    };
+  } catch (e) {
+    console.log(e);
 
-  return {
-    kind: "success",
-    body: results.data,
-  };
+    return {
+      kind: "failure",
+    };
+  }
 };
