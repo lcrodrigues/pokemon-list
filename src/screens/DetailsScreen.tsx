@@ -24,9 +24,10 @@ const Pokemon = styled.Image`
 const DetailsScreen = ({ route }: DetailsProps) => {
   const name = route.params.pokemon.name;
   const url = route.params.pokemon.url;
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    getPokemonDetails(url);
+    dispatch(fetchPokemonDetails({ url }));
   }, []);
 
   return (
