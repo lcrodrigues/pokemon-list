@@ -3,7 +3,6 @@ import React from "react";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import PokemonListScreen from "../screens/PokemonListScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import PokedexNavigator from "./PokedexNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -12,7 +11,6 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName="Pokemons"
       screenOptions={({ route }) => ({
-        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === "Pokedex") {
             return <Ionicons name="list" size={size} color={color} />;
@@ -28,7 +26,7 @@ const MainTabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen component={PokedexNavigator} name="Pokedex" />
+      <Tab.Screen component={PokemonListScreen} name="Pokedex" />
       <Tab.Screen component={FavoritesScreen} name="Team" />
     </Tab.Navigator>
   );
