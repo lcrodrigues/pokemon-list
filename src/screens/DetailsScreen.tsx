@@ -10,6 +10,17 @@ const Container = styled.View`
   align-items: center;
 `;
 
+const ImageContainer = styled.View`
+  width: 100%;
+  height: 45%;
+`;
+
+const Pokemon = styled.Image`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
 const DetailsScreen = ({ route }: DetailsProps) => {
   const name = route.params.pokemon.name;
   const url = route.params.pokemon.url;
@@ -20,7 +31,13 @@ const DetailsScreen = ({ route }: DetailsProps) => {
 
   return (
     <Container>
-      <Text>{name}</Text>
+      <ImageContainer>
+        <Pokemon
+          source={{
+            uri: `${image}`,
+          }}
+        />
+      </ImageContainer>
     </Container>
   );
 };
