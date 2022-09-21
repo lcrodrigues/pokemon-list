@@ -23,4 +23,7 @@ export type PokemonDetailsResult = {
     };
   }[];
   weight: number;
+  sprites: {
+    front_default: string;
+  };
 };
