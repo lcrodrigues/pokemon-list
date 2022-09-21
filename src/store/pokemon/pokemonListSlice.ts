@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import instance, { getPokemon } from "../../../services/api";
+import { getPokemon } from "../../../services/api";
 import { Pokemon } from "../../models/Pokemon";
-import { PokemonResult } from "../../models/PokemonResult";
+import { RootState } from "../store";
 import { isEqual } from "../../utils/functions/arrayFunctions";
 
 export type PokemonListState = {
@@ -41,7 +41,18 @@ export const fetchPokemon = createAsyncThunk<
 const pokemonListSlice = createSlice({
   name: "pokemonList",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setFavoriteByName: (state, action) => {
+      const list = state.pokemon.results;
+      const pokemonIndex = list?.findIndex(
+        (pokemon) => pokemon.name === action.payload.name
+      );
+
+      if (pokemonIndex !== -1) {
+        list[pokemonIndex].isFavorite = !list[pokemonIndex].isFavorite;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPokemon.pending, (state) => {
@@ -67,5 +78,15 @@ const pokemonListSlice = createSlice({
       });
   },
 });
+
+export const { setFavoriteByName } = pokemonListSlice.actions;
+
+export const getFavorites = (state: RootState) => {
+  const favorites = state.pokemonList.pokemon.results.filter(
+    (pokemon) => pokemon.isFavorite
+  );
+
+  return favorites;
+};
 
 export default pokemonListSlice.reducer;
