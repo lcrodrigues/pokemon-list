@@ -1,9 +1,11 @@
 import React from "react";
 import { capitalizeFirstLetter } from "../utils/functions/stringFunctions";
 import Favorite from "./Favorite";
-
+import { PokemonResult } from "../models/PokemonResult";
 import styled from "styled-components/native";
-import { TouchableOpacityProps, ViewProps } from "react-native";
+import { TouchableOpacityProps } from "react-native";
+import { useDispatch } from "react-redux";
+import { setFavoriteByName } from "../store/pokemon/pokemonListSlice";
 
 interface ContainerProps {
   index: number;
@@ -31,15 +33,24 @@ const Text = styled.Text`
 `;
 
 interface CellProps extends TouchableOpacityProps {
-  title: string;
+  pokemon: PokemonResult;
   index: number;
 }
 
-const Cell = ({ title, index, onPress }: CellProps) => {
+const Cell = ({ pokemon, index, onPress }: CellProps) => {
+  const dispatch = useDispatch();
+
+  const handleFavoriteOnPress = () => {
+    dispatch(setFavoriteByName(pokemon));
+  };
+
   return (
     <Container index={index} onPress={onPress}>
-      <Text>{capitalizeFirstLetter(title)}</Text>
-      <Favorite isFavorite={false} />
+      <Text>{capitalizeFirstLetter(pokemon.name)}</Text>
+      <Favorite
+        isFavorite={pokemon.isFavorite}
+        handleOnPress={handleFavoriteOnPress}
+      />
     </Container>
   );
 };

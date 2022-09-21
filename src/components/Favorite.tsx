@@ -4,18 +4,13 @@ import { FilledPokeball, Pokeball } from "../../assets/icons";
 
 interface FavoriteProps {
   isFavorite: boolean;
+  handleOnPress: () => void;
 }
 
-const Favorite = ({ isFavorite }: FavoriteProps) => {
-  const [favorite, setFavorite] = useState(isFavorite);
-
-  const handleSetFavorite = () => {
-    setFavorite((oldValue) => !oldValue);
-  };
-
+const Favorite = ({ isFavorite, handleOnPress }: FavoriteProps) => {
   return (
-    <TouchableOpacity onPress={handleSetFavorite}>
-      {favorite ? (
+    <TouchableOpacity onPress={handleOnPress}>
+      {isFavorite ? (
         <FilledPokeball width={24} height={24} />
       ) : (
         <Pokeball width={24} height={24} />
@@ -25,5 +20,3 @@ const Favorite = ({ isFavorite }: FavoriteProps) => {
 };
 
 export default Favorite;
-
-const styles = StyleSheet.create({});
