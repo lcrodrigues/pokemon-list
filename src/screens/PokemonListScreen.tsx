@@ -4,11 +4,14 @@ import Cell from "../components/Cell";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPokemon } from "../store/pokemon/pokemonListSlice";
 import { AppDispatch, RootState } from "../store/store";
-import { FilledPokeball } from "../../assets/icons";
-import { PokedexProps } from "../navigation/PokedexNavigator";
 import { PokemonResult } from "../models/PokemonResult";
+import { MainProps } from "../navigation/MainStackNavigator";
+import { useNavigation } from "@react-navigation/native";
 
-const PokemonListScreen = ({ navigation, route }: PokedexProps) => {
+const PokemonListScreen = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation<MainProps["navigation"]>();
+
   const handleOnEndReached = () => {
     const { loading, offset, pokemon } = screenState;
 
@@ -18,8 +21,6 @@ const PokemonListScreen = ({ navigation, route }: PokedexProps) => {
       }
     }
   };
-
-  const dispatch = useDispatch<AppDispatch>();
 
   const navigateToDetails = (pokemon: PokemonResult) => {
     navigation.navigate("DetailsScreen", { pokemon });
@@ -38,7 +39,7 @@ const PokemonListScreen = ({ navigation, route }: PokedexProps) => {
         <Cell
           onPress={() => navigateToDetails(item)}
           index={index}
-          title={item.name}
+          pokemon={item}
         />
       )}
       onEndReached={() => handleOnEndReached()}
@@ -49,9 +50,6 @@ const PokemonListScreen = ({ navigation, route }: PokedexProps) => {
 export default PokemonListScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   list: {
     margin: 16,
   },

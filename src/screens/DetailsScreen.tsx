@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
-import { DetailsProps } from "../navigation/PokedexNavigator";
+import { DetailsProps } from "../navigation/MainStackNavigator";
 
 const Container = styled.View`
   flex: 1;
