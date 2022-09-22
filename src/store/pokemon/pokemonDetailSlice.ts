@@ -10,10 +10,33 @@ export type PokemonDetailState = {
 
 const initialState: PokemonDetailState = {
   detail: {
-    stats: [],
-    abilities: [],
-    types: [],
+    stats: [
+      {
+        base_stat: 0,
+        stat: {
+          name: "attack",
+        },
+      },
+    ],
+    abilities: [
+      {
+        ability: {
+          name: "",
+        },
+      },
+    ],
+    types: [
+      {
+        slot: 0,
+        type: {
+          name: "",
+        },
+      },
+    ],
     weight: 0,
+    sprites: {
+      front_default: "",
+    },
   },
   loading: false,
   error: false,
